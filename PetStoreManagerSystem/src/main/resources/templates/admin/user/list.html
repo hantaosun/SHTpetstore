@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+  <title>用户管理 - PetStore Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" th:href="@{/admin/admin.css}"/>
+</head>
+<body>
+<div id="wrapper">
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}" th:with="activePage='user'"></div>
+  <div id="page-content-wrapper">
+    <div th:replace="~{admin/fragments/topbar :: topbar('用户管理')}"></div>
+    <div class="main-content">
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/admin/index}">仪表盘</a></li>
+          <li class="breadcrumb-item active">用户管理</li>
+        </ol>
+      </nav>
+
+      <div th:if="${message}" class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle me-2"></i><span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+
+      <div class="card">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <span><i class="bi bi-people me-2 text-primary"></i>用户列表</span>
+          <!-- 搜索框 -->
+          <form th:action="@{/admin/user/list}" method="get" class="d-flex gap-2">
+            <input type="text" class="form-control form-control-sm" name="keyword"
+                   th:value="${param.keyword}" placeholder="搜索用户名/邮箱" style="width:200px"/>
+            <button type="submit" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-search"></i>
+            </button>
+          </form>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
+              <tr>
+                <th>用户名</th>
+                <th>姓名</th>
+                <th>邮箱</th>
+                <th>手机</th>
+                <th>偏好分类</th>
+                <th>状态</th>
+                <th style="width:160px">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:if="${users == null or #lists.isEmpty(users)}">
+                <td colspan="7" class="text-center text-muted py-5">
+                  <i class="bi bi-inbox fs-2 d-block mb-2"></i>暂无用户数据
+                </td>
+              </tr>
+              <tr th:each="user : ${users}">
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                         style="width:32px;height:32px;font-size:0.85rem"
+                         th:text="${#strings.toUpperCase(#strings.substring(user.username,0,1))}">U</div>
+                    <span class="fw-semibold" th:text="${user.username}">username</span>
+                  </div>
+                </td>
+                <td th:text="${user.firstName + ' ' + user.lastName}">John Doe</td>
+                <td th:text="${user.email}">email@example.com</td>
+                <td th:text="${user.phone}">-</td>
+                <td>
+                  <span class="badge bg-light text-dark border"
+                        th:text="${user.favouriteCategoryId}">-</span>
+                </td>
+                <td>
+                  <span th:if="${user.status == 'OK' or user.status == null}" class="badge bg-success">正常</span>
+                  <span th:if="${user.status == 'BLOCKED'}" class="badge bg-danger">已封禁</span>
+                </td>
+                <td>
+                  <a th:href="@{/admin/user/detail/{id}(id=${user.username})}"
+                     class="btn btn-sm btn-outline-primary me-1">
+                    <i class="bi bi-eye"></i> 查看
+                  </a>
+                  <button type="button" class="btn btn-sm btn-outline-warning"
+                          th:data-id="${user.username}"
+                          th:data-name="${user.username}"
+                          onclick="confirmReset(this)">
+                    <i class="bi bi-key"></i>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div class="modal fade" id="resetModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h6 class="modal-title fw-bold"><i class="bi bi-key me-2 text-warning"></i>重置密码</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-2">为用户 <strong id="resetName"></strong> 重置密码：</p>
+        <form id="resetForm" method="post">
+          <input type="text" class="form-control" name="newPassword"
+                 placeholder="请输入新密码" required minlength="4"/>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="submit" form="resetForm" class="btn btn-sm btn-warning">确认重置</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+  const ctx = /*[[@{/admin/user/resetPassword/}]]*/ '/admin/user/resetPassword/';
+  function confirmReset(btn) {
+    document.getElementById('resetName').textContent = btn.dataset.name;
+    document.getElementById('resetForm').action = ctx + btn.dataset.id;
+    new bootstrap.Modal(document.getElementById('resetModal')).show();
+  }
+  document.getElementById('sidebarToggle')?.addEventListener('click', () =>
+    document.getElementById('wrapper').classList.toggle('toggled'));
+</script>
+</body>
+</html>

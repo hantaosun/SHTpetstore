@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sht.admin.mapper.ProductMapper">
+
+    <select id="listAll" resultType="Product">
+        SELECT PRODUCTID AS productId, CATEGORY AS categoryId, NAME, DESCN AS description
+        FROM PRODUCT
+        ORDER BY PRODUCTID
+    </select>
+
+    <select id="listByCategory" resultType="Product">
+        SELECT PRODUCTID AS productId, CATEGORY AS categoryId, NAME, DESCN AS description
+        FROM PRODUCT
+        WHERE CATEGORY = #{categoryId}
+        ORDER BY PRODUCTID
+    </select>
+
+    <select id="findById" resultType="Product">
+        SELECT PRODUCTID AS productId, CATEGORY AS categoryId, NAME, DESCN AS description
+        FROM PRODUCT
+        WHERE PRODUCTID = #{productId}
+    </select>
+
+    <insert id="insert" parameterType="Product">
+        INSERT INTO PRODUCT (PRODUCTID, CATEGORY, NAME, DESCN)
+        VALUES (#{productId}, #{categoryId}, #{name}, #{description})
+    </insert>
+
+    <update id="update" parameterType="Product">
+        UPDATE PRODUCT SET CATEGORY = #{categoryId}, NAME = #{name}, DESCN = #{description}
+        WHERE PRODUCTID = #{productId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM PRODUCT WHERE PRODUCTID = #{productId}
+    </delete>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM PRODUCT
+    </select>
+
+</mapper>

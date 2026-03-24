@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+  <title th:text="${isEdit} ? '编辑商品' : '新增商品'">商品表单 - PetStore Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" th:href="@{/admin/admin.css}"/>
+</head>
+<body>
+<div id="wrapper">
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}" th:with="activePage='product'"></div>
+  <div id="page-content-wrapper">
+    <div th:replace="~{admin/fragments/topbar :: topbar(${isEdit} ? '编辑商品' : '新增商品')}"></div>
+    <div class="main-content">
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/admin/index}">仪表盘</a></li>
+          <li class="breadcrumb-item"><a th:href="@{/admin/product/list}">商品管理</a></li>
+          <li class="breadcrumb-item active" th:text="${isEdit} ? '编辑商品' : '新增商品'">新增商品</li>
+        </ol>
+      </nav>
+
+      <div class="row">
+        <div class="col-lg-7">
+          <div class="card">
+            <div class="card-header">
+              <i class="bi bi-box-seam me-2 text-primary"></i>
+              <span th:text="${isEdit} ? '编辑商品信息' : '填写商品信息'">商品信息</span>
+            </div>
+            <div class="card-body">
+              <form th:action="${isEdit} ? @{/admin/product/update} : @{/admin/product/save}"
+                    method="post" novalidate>
+                <input th:if="${isEdit}" type="hidden" name="productId"
+                       th:value="${product.productId}"/>
+
+                <div class="mb-3">
+                  <label for="productId" class="form-label">商品ID <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="productId" name="productId"
+                         th:value="${product?.productId}"
+                         th:readonly="${isEdit}"
+                         placeholder="如：FI-SW-01" required/>
+                </div>
+
+                <div class="mb-3">
+                  <label for="categoryId" class="form-label">所属分类 <span class="text-danger">*</span></label>
+                  <select class="form-select" id="categoryId" name="categoryId" required>
+                    <option value="">请选择分类</option>
+                    <option th:each="cat : ${categories}"
+                            th:value="${cat.categoryId}"
+                            th:text="${cat.name}"
+                            th:selected="${product?.categoryId == cat.categoryId}">Fish</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="name" class="form-label">商品名称 <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="name" name="name"
+                         th:value="${product?.name}"
+                         placeholder="请输入商品名称" required/>
+                </div>
+
+                <div class="mb-4">
+                  <label for="description" class="form-label">商品描述</label>
+                  <textarea class="form-control" id="description" name="description"
+                            rows="3" placeholder="请输入商品描述"
+                            th:text="${product?.description}"></textarea>
+                </div>
+
+                <div class="d-flex gap-2">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i>
+                    <span th:text="${isEdit} ? '保存修改' : '新增商品'">提交</span>
+                  </button>
+                  <a th:href="@{/admin/product/list}" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-lg me-1"></i>取消
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById('sidebarToggle')?.addEventListener('click', () =>
+    document.getElementById('wrapper').classList.toggle('toggled'));
+</script>
+</body>
+</html>

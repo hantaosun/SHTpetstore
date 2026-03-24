@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sht.admin.mapper.AccountMapper">
+
+    <resultMap id="accountResultMap" type="Account">
+        <result property="username" column="username"/>
+        <result property="email" column="email"/>
+        <result property="firstName" column="firstName"/>
+        <result property="lastName" column="lastName"/>
+        <result property="status" column="status"/>
+        <result property="address1" column="address1"/>
+        <result property="address2" column="address2"/>
+        <result property="city" column="city"/>
+        <result property="state" column="state"/>
+        <result property="zip" column="zip"/>
+        <result property="country" column="country"/>
+        <result property="phone" column="phone"/>
+        <result property="favouriteCategoryId" column="favouriteCategoryId"/>
+        <result property="languagePreference" column="languagePreference"/>
+    </resultMap>
+
+    <select id="listAll" resultMap="accountResultMap">
+        SELECT
+            A.USERID AS username,
+            A.EMAIL AS email,
+            A.FIRSTNAME AS firstName,
+            A.LASTNAME AS lastName,
+            A.STATUS AS status,
+            A.ADDR1 AS address1,
+            A.ADDR2 AS address2,
+            A.CITY AS city,
+            A.STATE AS state,
+            A.ZIP AS zip,
+            A.COUNTRY AS country,
+            A.PHONE AS phone,
+            P.FAVCATEGORY AS favouriteCategoryId,
+            P.LANGPREF AS languagePreference
+        FROM ACCOUNT A
+        LEFT JOIN PROFILE P ON P.USERID = A.USERID
+        ORDER BY A.USERID
+    </select>
+
+    <select id="search" resultMap="accountResultMap">
+        SELECT
+            A.USERID AS username,
+            A.EMAIL AS email,
+            A.FIRSTNAME AS firstName,
+            A.LASTNAME AS lastName,
+            A.STATUS AS status,
+            A.ADDR1 AS address1,
+            A.ADDR2 AS address2,
+            A.CITY AS city,
+            A.STATE AS state,
+            A.ZIP AS zip,
+            A.COUNTRY AS country,
+            A.PHONE AS phone,
+            P.FAVCATEGORY AS favouriteCategoryId,
+            P.LANGPREF AS languagePreference
+        FROM ACCOUNT A
+        LEFT JOIN PROFILE P ON P.USERID = A.USERID
+        WHERE A.USERID LIKE CONCAT('%', #{keyword}, '%')
+           OR A.EMAIL LIKE CONCAT('%', #{keyword}, '%')
+           OR A.FIRSTNAME LIKE CONCAT('%', #{keyword}, '%')
+           OR A.LASTNAME LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY A.USERID
+    </select>
+
+    <select id="findByUsername" resultMap="accountResultMap">
+        SELECT
+            A.USERID AS username,
+            A.EMAIL AS email,
+            A.FIRSTNAME AS firstName,
+            A.LASTNAME AS lastName,
+            A.STATUS AS status,
+            A.ADDR1 AS address1,
+            A.ADDR2 AS address2,
+            A.CITY AS city,
+            A.STATE AS state,
+            A.ZIP AS zip,
+            A.COUNTRY AS country,
+            A.PHONE AS phone,
+            P.FAVCATEGORY AS favouriteCategoryId,
+            P.LANGPREF AS languagePreference
+        FROM ACCOUNT A
+        LEFT JOIN PROFILE P ON P.USERID = A.USERID
+        WHERE A.USERID = #{username}
+    </select>
+
+    <update id="update" parameterType="Account">
+        UPDATE ACCOUNT SET
+            EMAIL     = #{email},
+            FIRSTNAME = #{firstName},
+            LASTNAME  = #{lastName},
+            STATUS    = #{status},
+            ADDR1     = #{address1},
+            ADDR2     = #{address2, jdbcType=VARCHAR},
+            CITY      = #{city},
+            STATE     = #{state},
+            ZIP       = #{zip},
+            COUNTRY   = #{country},
+            PHONE     = #{phone}
+        WHERE USERID = #{username}
+    </update>
+
+    <update id="resetPassword">
+        UPDATE SIGNON SET PASSWORD = #{password} WHERE USERNAME = #{username}
+    </update>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM ACCOUNT
+    </select>
+
+</mapper>

@@ -1,0 +1,221 @@
+:root {
+  --sidebar-width: 240px;
+  --sidebar-bg: #1a2e4a;
+  --sidebar-text: #c8d8e8;
+  --sidebar-active-bg: #2563eb;
+  --topbar-bg: #1e40af;
+  --topbar-height: 58px;
+}
+
+body {
+  background-color: #f0f4f8;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== Wrapper ===== */
+#wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== Sidebar ===== */
+#sidebar-wrapper {
+  width: var(--sidebar-width);
+  min-height: 100vh;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  flex-shrink: 0;
+  transition: width 0.25s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.sidebar-heading {
+  color: #fff;
+  min-height: var(--topbar-height);
+}
+
+.sidebar-heading-text {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b8aab;
+  font-weight: 600;
+}
+
+.sidebar-divider {
+  border-color: #2d4a6a;
+  margin: 0.4rem 0;
+}
+
+.sidebar-link {
+  color: var(--sidebar-text) !important;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-size: 0.9rem;
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff !important;
+}
+
+.sidebar-link.active {
+  background-color: var(--sidebar-active-bg) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+/* ===== Page Content ===== */
+#page-content-wrapper {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ===== Topbar ===== */
+.topbar {
+  background-color: var(--topbar-bg);
+  height: var(--topbar-height);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* ===== Main Content ===== */
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+/* ===== Cards ===== */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+}
+
+/* ===== Stat Cards ===== */
+.stat-card {
+  border-radius: 12px;
+  color: #fff;
+  padding: 1.25rem;
+}
+
+.stat-card .stat-icon {
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+
+.stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+/* ===== Tables ===== */
+.table th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6c757d;
+  font-weight: 600;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table td {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f0f7ff;
+}
+
+/* ===== Breadcrumb ===== */
+.breadcrumb {
+  background: none;
+  padding: 0;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+/* ===== Badges ===== */
+.badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.35em 0.7em;
+  border-radius: 6px;
+}
+
+/* ===== Forms ===== */
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-control, .form-select {
+  border-radius: 8px;
+  font-size: 0.9rem;
+  border-color: #d1d5db;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+/* ===== Sidebar Toggle ===== */
+#wrapper.toggled #sidebar-wrapper {
+  width: 0;
+  overflow: hidden;
+}
+
+#wrapper.toggled #page-content-wrapper {
+  margin-left: 0;
+}
+
+/* ===== Alert ===== */
+.alert {
+  border-radius: 10px;
+  border: none;
+}
+
+/* ===== Login Page ===== */
+.login-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a2e4a 0%, #2563eb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  width: 420px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}

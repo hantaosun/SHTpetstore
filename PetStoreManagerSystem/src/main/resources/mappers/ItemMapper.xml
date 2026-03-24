@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sht.admin.mapper.ItemMapper">
+
+    <resultMap id="itemResultMap" type="Item">
+        <id property="itemId" column="itemId"/>
+        <result property="productId" column="productId"/>
+        <result property="listPrice" column="listPrice"/>
+        <result property="unitCost" column="unitCost"/>
+        <result property="supplierId" column="supplierId"/>
+        <result property="status" column="status"/>
+        <result property="attribute1" column="attribute1"/>
+        <result property="attribute2" column="attribute2"/>
+        <result property="attribute3" column="attribute3"/>
+        <result property="attribute4" column="attribute4"/>
+        <result property="attribute5" column="attribute5"/>
+        <result property="quantity" column="quantity"/>
+        <association property="product" javaType="Product">
+            <id property="productId" column="productId"/>
+            <result property="name" column="productName"/>
+            <result property="categoryId" column="categoryId"/>
+            <result property="description" column="productDescription"/>
+        </association>
+    </resultMap>
+
+    <select id="listAll" resultMap="itemResultMap">
+        SELECT
+            I.ITEMID AS itemId,
+            I.PRODUCTID AS productId,
+            LISTPRICE AS listPrice,
+            UNITCOST AS unitCost,
+            SUPPLIER AS supplierId,
+            STATUS AS status,
+            ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3,
+            ATTR4 AS attribute4, ATTR5 AS attribute5,
+            COALESCE(V.QTY, 0) AS quantity,
+            P.NAME AS productName,
+            P.CATEGORY AS categoryId,
+            P.DESCN AS productDescription
+        FROM ITEM I
+        JOIN PRODUCT P ON P.PRODUCTID = I.PRODUCTID
+        LEFT JOIN INVENTORY V ON V.ITEMID = I.ITEMID
+        ORDER BY I.ITEMID
+    </select>
+
+    <select id="listByProduct" resultMap="itemResultMap">
+        SELECT
+            I.ITEMID AS itemId,
+            I.PRODUCTID AS productId,
+            LISTPRICE AS listPrice,
+            UNITCOST AS unitCost,
+            SUPPLIER AS supplierId,
+            STATUS AS status,
+            ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3,
+            ATTR4 AS attribute4, ATTR5 AS attribute5,
+            COALESCE(V.QTY, 0) AS quantity,
+            P.NAME AS productName,
+            P.CATEGORY AS categoryId,
+            P.DESCN AS productDescription
+        FROM ITEM I
+        JOIN PRODUCT P ON P.PRODUCTID = I.PRODUCTID
+        LEFT JOIN INVENTORY V ON V.ITEMID = I.ITEMID
+        WHERE I.PRODUCTID = #{productId}
+        ORDER BY I.ITEMID
+    </select>
+
+    <select id="findById" resultMap="itemResultMap">
+        SELECT
+            I.ITEMID AS itemId,
+            I.PRODUCTID AS productId,
+            LISTPRICE AS listPrice,
+            UNITCOST AS unitCost,
+            SUPPLIER AS supplierId,
+            STATUS AS status,
+            ATTR1 AS attribute1, ATTR2 AS attribute2, ATTR3 AS attribute3,
+            ATTR4 AS attribute4, ATTR5 AS attribute5,
+            COALESCE(V.QTY, 0) AS quantity,
+            P.NAME AS productName,
+            P.CATEGORY AS categoryId,
+            P.DESCN AS productDescription
+        FROM ITEM I
+        JOIN PRODUCT P ON P.PRODUCTID = I.PRODUCTID
+        LEFT JOIN INVENTORY V ON V.ITEMID = I.ITEMID
+        WHERE I.ITEMID = #{itemId}
+    </select>
+
+    <insert id="insertItem" parameterType="Item">
+        INSERT INTO ITEM (ITEMID, PRODUCTID, LISTPRICE, UNITCOST, SUPPLIER, STATUS,
+                          ATTR1, ATTR2, ATTR3, ATTR4, ATTR5)
+        VALUES (#{itemId}, #{productId}, #{listPrice}, #{unitCost}, #{supplierId}, #{status},
+                #{attribute1}, #{attribute2}, #{attribute3}, #{attribute4}, #{attribute5})
+    </insert>
+
+    <insert id="insertInventory" parameterType="Item">
+        INSERT INTO INVENTORY (ITEMID, QTY) VALUES (#{itemId}, #{quantity})
+    </insert>
+
+    <update id="updateItem" parameterType="Item">
+        UPDATE ITEM SET
+            PRODUCTID  = #{productId},
+            LISTPRICE  = #{listPrice},
+            UNITCOST   = #{unitCost},
+            SUPPLIER   = #{supplierId},
+            STATUS     = #{status},
+            ATTR1 = #{attribute1}, ATTR2 = #{attribute2}, ATTR3 = #{attribute3},
+            ATTR4 = #{attribute4}, ATTR5 = #{attribute5}
+        WHERE ITEMID = #{itemId}
+    </update>
+
+    <update id="updateInventory" parameterType="Item">
+        UPDATE INVENTORY SET QTY = #{quantity} WHERE ITEMID = #{itemId}
+    </update>
+
+    <delete id="deleteItem">
+        DELETE FROM ITEM WHERE ITEMID = #{itemId}
+    </delete>
+
+    <delete id="deleteInventory">
+        DELETE FROM INVENTORY WHERE ITEMID = #{itemId}
+    </delete>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM ITEM
+    </select>
+
+</mapper>

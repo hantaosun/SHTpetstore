@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sht.admin.mapper.OrderMapper">
+
+    <resultMap id="orderResultMap" type="Order">
+        <result property="orderId" column="orderId"/>
+        <result property="username" column="username"/>
+        <result property="orderDate" column="orderDate"/>
+        <result property="shipAddress1" column="shipAddress1"/>
+        <result property="shipAddress2" column="shipAddress2"/>
+        <result property="shipCity" column="shipCity"/>
+        <result property="shipState" column="shipState"/>
+        <result property="shipZip" column="shipZip"/>
+        <result property="shipCountry" column="shipCountry"/>
+        <result property="billAddress1" column="billAddress1"/>
+        <result property="billAddress2" column="billAddress2"/>
+        <result property="billCity" column="billCity"/>
+        <result property="billState" column="billState"/>
+        <result property="billZip" column="billZip"/>
+        <result property="billCountry" column="billCountry"/>
+        <result property="courier" column="courier"/>
+        <result property="totalPrice" column="totalPrice"/>
+        <result property="billToFirstName" column="billToFirstName"/>
+        <result property="billToLastName" column="billToLastName"/>
+        <result property="shipToFirstName" column="shipToFirstName"/>
+        <result property="shipToLastName" column="shipToLastName"/>
+        <result property="creditCard" column="creditCard"/>
+        <result property="expiryDate" column="expiryDate"/>
+        <result property="cardType" column="cardType"/>
+        <result property="locale" column="locale"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="orderColumns">
+        O.ORDERID AS orderId, O.USERID AS username, O.ORDERDATE AS orderDate,
+        O.SHIPADDR1 AS shipAddress1, O.SHIPADDR2 AS shipAddress2,
+        O.SHIPCITY AS shipCity, O.SHIPSTATE AS shipState, O.SHIPZIP AS shipZip,
+        O.SHIPCOUNTRY AS shipCountry,
+        O.BILLADDR1 AS billAddress1, O.BILLADDR2 AS billAddress2,
+        O.BILLCITY AS billCity, O.BILLSTATE AS billState, O.BILLZIP AS billZip,
+        O.BILLCOUNTRY AS billCountry,
+        O.COURIER AS courier, O.TOTALPRICE AS totalPrice,
+        O.BILLTOFIRSTNAME AS billToFirstName, O.BILLTOLASTNAME AS billToLastName,
+        O.SHIPTOFIRSTNAME AS shipToFirstName, O.SHIPTOLASTNAME AS shipToLastName,
+        O.CREDITCARD AS creditCard, O.EXPRDATE AS expiryDate,
+        O.CARDTYPE AS cardType, O.LOCALE AS locale,
+        OS.STATUS AS status
+    </sql>
+
+    <select id="listAll" resultMap="orderResultMap">
+        SELECT <include refid="orderColumns"/>
+        FROM ORDERS O JOIN ORDERSTATUS OS ON OS.ORDERID = O.ORDERID
+        ORDER BY O.ORDERDATE DESC
+    </select>
+
+    <select id="listByStatus" resultMap="orderResultMap">
+        SELECT <include refid="orderColumns"/>
+        FROM ORDERS O JOIN ORDERSTATUS OS ON OS.ORDERID = O.ORDERID
+        WHERE OS.STATUS = #{status}
+        ORDER BY O.ORDERDATE DESC
+    </select>
+
+    <select id="search" resultMap="orderResultMap">
+        SELECT <include refid="orderColumns"/>
+        FROM ORDERS O JOIN ORDERSTATUS OS ON OS.ORDERID = O.ORDERID
+        WHERE CAST(O.ORDERID AS CHAR) LIKE CONCAT('%', #{keyword}, '%')
+           OR O.USERID LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY O.ORDERDATE DESC
+    </select>
+
+    <select id="findById" resultMap="orderResultMap">
+        SELECT <include refid="orderColumns"/>
+        FROM ORDERS O JOIN ORDERSTATUS OS ON OS.ORDERID = O.ORDERID
+        WHERE O.ORDERID = #{orderId}
+    </select>
+
+    <resultMap id="lineItemResultMap" type="LineItem">
+        <result property="orderId" column="orderId"/>
+        <result property="lineNumber" column="lineNumber"/>
+        <result property="itemId" column="itemId"/>
+        <result property="quantity" column="quantity"/>
+        <result property="unitPrice" column="unitPrice"/>
+        <association property="item" javaType="Item">
+            <id property="itemId" column="itemId"/>
+            <result property="productId" column="itemProductId"/>
+            <result property="attribute1" column="attribute1"/>
+            <result property="attribute2" column="attribute2"/>
+            <result property="attribute3" column="attribute3"/>
+            <association property="product" javaType="Product">
+                <id property="productId" column="itemProductId"/>
+                <result property="name" column="productName"/>
+            </association>
+        </association>
+    </resultMap>
+
+    <select id="listLineItems" resultMap="lineItemResultMap">
+        SELECT
+            L.ORDERID AS orderId,
+            L.LINENUM AS lineNumber,
+            L.ITEMID AS itemId,
+            L.QUANTITY AS quantity,
+            L.UNITPRICE AS unitPrice,
+            I.PRODUCTID AS itemProductId,
+            I.ATTR1 AS attribute1,
+            I.ATTR2 AS attribute2,
+            I.ATTR3 AS attribute3,
+            P.NAME AS productName
+        FROM LINEITEM L
+        LEFT JOIN ITEM I ON I.ITEMID = L.ITEMID
+        LEFT JOIN PRODUCT P ON P.PRODUCTID = I.PRODUCTID
+        WHERE L.ORDERID = #{orderId}
+        ORDER BY L.LINENUM
+    </select>
+
+    <update id="updateStatus">
+        UPDATE ORDERSTATUS SET STATUS = #{status} WHERE ORDERID = #{orderId}
+    </update>
+
+    <update id="updateCourier">
+        UPDATE ORDERS SET COURIER = #{courier} WHERE ORDERID = #{orderId}
+    </update>
+
+    <delete id="deleteLineItems">
+        DELETE FROM LINEITEM WHERE ORDERID = #{orderId}
+    </delete>
+
+    <delete id="deleteOrderStatus">
+        DELETE FROM ORDERSTATUS WHERE ORDERID = #{orderId}
+    </delete>
+
+    <delete id="deleteOrder">
+        DELETE FROM ORDERS WHERE ORDERID = #{orderId}
+    </delete>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM ORDERS
+    </select>
+
+    <select id="listRecent" resultMap="orderResultMap">
+        SELECT <include refid="orderColumns"/>
+        FROM ORDERS O JOIN ORDERSTATUS OS ON OS.ORDERID = O.ORDERID
+        ORDER BY O.ORDERDATE DESC
+        LIMIT #{limit}
+    </select>
+
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sht.admin.mapper.CategoryMapper">
+
+    <select id="listAll" resultType="Category">
+        SELECT CATID AS categoryId, NAME, DESCN AS description
+        FROM CATEGORY
+        ORDER BY CATID
+    </select>
+
+    <select id="findById" resultType="Category">
+        SELECT CATID AS categoryId, NAME, DESCN AS description
+        FROM CATEGORY
+        WHERE CATID = #{categoryId}
+    </select>
+
+    <insert id="insert" parameterType="Category">
+        INSERT INTO CATEGORY (CATID, NAME, DESCN)
+        VALUES (#{categoryId}, #{name}, #{description})
+    </insert>
+
+    <update id="update" parameterType="Category">
+        UPDATE CATEGORY SET NAME = #{name}, DESCN = #{description}
+        WHERE CATID = #{categoryId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM CATEGORY WHERE CATID = #{categoryId}
+    </delete>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM CATEGORY
+    </select>
+
+</mapper>

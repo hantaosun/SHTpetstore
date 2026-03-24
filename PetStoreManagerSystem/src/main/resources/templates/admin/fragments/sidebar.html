@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="sidebar" id="sidebar-wrapper">
+  <div class="sidebar-heading d-flex align-items-center px-3 py-4">
+    <i class="bi bi-shop-window fs-4 me-2 text-warning"></i>
+    <span class="fw-bold fs-5">PetStore Admin</span>
+  </div>
+  <hr class="sidebar-divider my-0">
+
+  <ul class="nav flex-column px-2 pt-2">
+
+    <!-- Dashboard -->
+    <li class="nav-item">
+      <a class="nav-link sidebar-link" th:href="@{/admin/index}"
+         th:classappend="${activePage == 'dashboard'} ? 'active' : ''">
+        <i class="bi bi-speedometer2 me-2"></i>仪表盘
+      </a>
+    </li>
+
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading-text px-3 mb-1">商品管理</div>
+
+    <!-- Category -->
+    <li class="nav-item">
+      <a class="nav-link sidebar-link" th:href="@{/admin/category/list}"
+         th:classappend="${activePage == 'category'} ? 'active' : ''">
+        <i class="bi bi-tags me-2"></i>分类管理
+      </a>
+    </li>
+
+    <!-- Product -->
+    <li class="nav-item">
+      <a class="nav-link sidebar-link" th:href="@{/admin/product/list}"
+         th:classappend="${activePage == 'product'} ? 'active' : ''">
+        <i class="bi bi-box-seam me-2"></i>商品管理
+      </a>
+    </li>
+
+    <!-- Item -->
+    <li class="nav-item">
+      <a class="nav-link sidebar-link" th:href="@{/admin/item/list}"
+         th:classappend="${activePage == 'item'} ? 'active' : ''">
+        <i class="bi bi-upc-scan me-2"></i>SKU 管理
+      </a>
+    </li>
+
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading-text px-3 mb-1">用户管理</div>
+
+    <!-- User -->
+    <li class="nav-item">
+      <a class="nav-link sidebar-link" th:href="@{/admin/user/list}"
+         th:classappend="${activePage == 'user'} ? 'active' : ''">
+        <i class="bi bi-people me-2"></i>用户列表
+      </a>
+    </li>
+
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading-text px-3 mb-1">订单管理</div>
+
+    <!-- Order -->
+    <li class="nav-item">
+      <a class="nav-link sidebar-link" th:href="@{/admin/order/list}"
+         th:classappend="${activePage == 'order'} ? 'active' : ''">
+        <i class="bi bi-receipt me-2"></i>订单列表
+      </a>
+    </li>
+
+    <hr class="sidebar-divider">
+
+    <!-- Logout -->
+    <li class="nav-item mt-2">
+      <a class="nav-link sidebar-link text-danger" th:href="@{/admin/logout}">
+        <i class="bi bi-box-arrow-left me-2"></i>退出登录
+      </a>
+    </li>
+  </ul>
+</nav>
+</body>
+</html>
