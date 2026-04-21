@@ -19,6 +19,7 @@ public class CategoryController {
     public String list(Model model) {
         model.addAttribute("categories", categoryService.listAll());
         model.addAttribute("activePage", "category");
+        System.out.println("xixi");
         return "admin/category/list";
     }
 
@@ -26,6 +27,7 @@ public class CategoryController {
     public String addForm(Model model) {
         model.addAttribute("isEdit", false);
         model.addAttribute("category", null);
+        model.addAttribute("activePage", "category");
         return "admin/category/form";
     }
 
@@ -33,6 +35,7 @@ public class CategoryController {
     public String editForm(@PathVariable String id, Model model) {
         model.addAttribute("isEdit", true);
         model.addAttribute("category", categoryService.findById(id));
+        model.addAttribute("activePage", "category");
         return "admin/category/form";
     }
 

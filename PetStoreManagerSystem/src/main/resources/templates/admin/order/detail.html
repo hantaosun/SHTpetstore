@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="wrapper">
-  <div th:replace="~{admin/fragments/sidebar :: sidebar}" th:with="activePage='order'"></div>
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
   <div id="page-content-wrapper">
     <div th:replace="~{admin/fragments/topbar :: topbar('订单详情')}"></div>
     <div class="main-content">
@@ -41,7 +41,7 @@
                 <dt class="col-5">用户名</dt>
                 <dd class="col-7" th:text="${order?.username}">user</dd>
                 <dt class="col-5">下单时间</dt>
-                <dd class="col-7" th:text="${#dates.format(order?.orderDate,'yyyy-MM-dd HH:mm')}">-</dd>
+                <dd class="col-7" th:text="${order?.orderDate != null ? #temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm') : '-'}">-</dd>
                 <dt class="col-5">物流商</dt>
                 <dd class="col-7" th:text="${order?.courier}">UPS</dd>
                 <dt class="col-5">总金额</dt>
@@ -115,23 +115,23 @@
                 <div class="col-md-6">
                   <h6 class="fw-semibold mb-2 text-muted small text-uppercase">账单地址</h6>
                   <p class="mb-1 fw-semibold"
-                     th:text="${order?.billToFirstName + ' ' + order?.billToLastName}">John Doe</p>
+                     th:text="${(order?.billToFirstName != null ? order.billToFirstName : '') + ' ' + (order?.billToLastName != null ? order.billToLastName : '')}">John Doe</p>
                   <p class="mb-0 small text-muted" th:text="${order?.billAddress1}">Address 1</p>
                   <p class="mb-0 small text-muted"
                      th:if="${order?.billAddress2}" th:text="${order?.billAddress2}">Address 2</p>
                   <p class="mb-0 small text-muted"
-                     th:text="${order?.billCity + ', ' + order?.billState + ' ' + order?.billZip}">City</p>
+                     th:text="${(order?.billCity != null ? order.billCity : '') + ', ' + (order?.billState != null ? order.billState : '') + ' ' + (order?.billZip != null ? order.billZip : '')}">City</p>
                   <p class="mb-0 small text-muted" th:text="${order?.billCountry}">Country</p>
                 </div>
                 <div class="col-md-6">
                   <h6 class="fw-semibold mb-2 text-muted small text-uppercase">收货地址</h6>
                   <p class="mb-1 fw-semibold"
-                     th:text="${order?.shipToFirstName + ' ' + order?.shipToLastName}">John Doe</p>
+                     th:text="${(order?.shipToFirstName != null ? order.shipToFirstName : '') + ' ' + (order?.shipToLastName != null ? order.shipToLastName : '')}">John Doe</p>
                   <p class="mb-0 small text-muted" th:text="${order?.shipAddress1}">Address 1</p>
                   <p class="mb-0 small text-muted"
                      th:if="${order?.shipAddress2}" th:text="${order?.shipAddress2}">Address 2</p>
                   <p class="mb-0 small text-muted"
-                     th:text="${order?.shipCity + ', ' + order?.shipState + ' ' + order?.shipZip}">City</p>
+                     th:text="${(order?.shipCity != null ? order.shipCity : '') + ', ' + (order?.shipState != null ? order.shipState : '') + ' ' + (order?.shipZip != null ? order.shipZip : '')}">City</p>
                   <p class="mb-0 small text-muted" th:text="${order?.shipCountry}">Country</p>
                 </div>
               </div>

@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="wrapper">
-  <div th:replace="~{admin/fragments/sidebar :: sidebar}" th:with="activePage='item'"></div>
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
   <div id="page-content-wrapper">
     <div th:replace="~{admin/fragments/topbar :: topbar(${isEdit} ? '编辑 SKU' : '新增 SKU')}"></div>
     <div class="main-content">

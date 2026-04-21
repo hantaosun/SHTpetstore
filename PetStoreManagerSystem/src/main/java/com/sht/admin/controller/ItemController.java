@@ -33,6 +33,7 @@ public class ItemController {
         model.addAttribute("isEdit", false);
         model.addAttribute("item", null);
         model.addAttribute("products", productService.listAll());
+        model.addAttribute("activePage", "item");
         return "admin/item/form";
     }
 
@@ -41,6 +42,7 @@ public class ItemController {
         model.addAttribute("isEdit", true);
         model.addAttribute("item", itemService.findById(id));
         model.addAttribute("products", productService.listAll());
+        model.addAttribute("activePage", "item");
         return "admin/item/form";
     }
 

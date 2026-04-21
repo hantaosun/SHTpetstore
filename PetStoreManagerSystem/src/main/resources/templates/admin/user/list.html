@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="wrapper">
-  <div th:replace="~{admin/fragments/sidebar :: sidebar}" th:with="activePage='user'"></div>
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
   <div id="page-content-wrapper">
     <div th:replace="~{admin/fragments/topbar :: topbar('用户管理')}"></div>
     <div class="main-content">
@@ -63,11 +63,11 @@
                   <div class="d-flex align-items-center gap-2">
                     <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
                          style="width:32px;height:32px;font-size:0.85rem"
-                         th:text="${#strings.toUpperCase(#strings.substring(user.username,0,1))}">U</div>
+                         th:text="${user.username != null && !#strings.isEmpty(user.username) ? #strings.toUpperCase(#strings.substring(user.username,0,1)) : '?'}">U</div>
                     <span class="fw-semibold" th:text="${user.username}">username</span>
                   </div>
                 </td>
-                <td th:text="${user.firstName + ' ' + user.lastName}">John Doe</td>
+                <td th:text="${(user.firstName != null ? user.firstName : '') + ' ' + (user.lastName != null ? user.lastName : '')}">John Doe</td>
                 <td th:text="${user.email}">email@example.com</td>
                 <td th:text="${user.phone}">-</td>
                 <td>

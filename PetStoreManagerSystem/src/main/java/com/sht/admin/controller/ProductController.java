@@ -33,6 +33,7 @@ public class ProductController {
         model.addAttribute("isEdit", false);
         model.addAttribute("product", null);
         model.addAttribute("categories", categoryService.listAll());
+        model.addAttribute("activePage", "product");
         return "admin/product/form";
     }
 
@@ -41,6 +42,7 @@ public class ProductController {
         model.addAttribute("isEdit", true);
         model.addAttribute("product", productService.findById(id));
         model.addAttribute("categories", categoryService.listAll());
+        model.addAttribute("activePage", "product");
         return "admin/product/form";
     }
 

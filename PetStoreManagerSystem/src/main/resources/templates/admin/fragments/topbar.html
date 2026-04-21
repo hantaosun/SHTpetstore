@@ -9,8 +9,7 @@
   <div class="ms-auto d-flex align-items-center gap-3">
     <span class="text-white-50 small">
       <i class="bi bi-person-circle me-1"></i>
-      <!-- adminUser 在 Session 中存的是用户名字符串，不是对象 -->
-      <span th:text="${session.adminUser != null ? session.adminUser : 'Admin'}">Admin</span>
+      <span th:text="${(adminUserDisplay != null && !adminUserDisplay.isEmpty()) ? adminUserDisplay : 'Admin'}">Admin</span>
     </span>
     <a th:href="@{/admin/logout}" class="btn btn-sm btn-outline-light">
       <i class="bi bi-box-arrow-right me-1"></i>退出

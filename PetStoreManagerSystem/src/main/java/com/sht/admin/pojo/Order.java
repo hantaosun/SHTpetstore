@@ -3,14 +3,14 @@ package com.sht.admin.pojo;
 import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 public class Order implements Serializable {
     private int orderId;
     private String username;
-    private Date orderDate;
+    private LocalDateTime orderDate;
     private String shipAddress1;
     private String shipAddress2;
     private String shipCity;

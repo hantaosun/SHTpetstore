@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="wrapper">
-  <div th:replace="~{admin/fragments/sidebar :: sidebar}" th:with="activePage='order'"></div>
+  <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
   <div id="page-content-wrapper">
     <div th:replace="~{admin/fragments/topbar :: topbar('订单管理')}"></div>
     <div class="main-content">
@@ -71,10 +71,10 @@
               <tr th:each="order : ${orders}">
                 <td><span class="fw-semibold" th:text="'#' + order.orderId">#001</span></td>
                 <td th:text="${order.username}">username</td>
-                <td th:text="${#dates.format(order.orderDate,'yyyy-MM-dd HH:mm')}">2024-01-01</td>
+                <td th:text="${order.orderDate != null ? #temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm') : '-'}">2024-01-01</td>
                 <td th:text="${order.shipToFirstName + ' ' + order.shipToLastName}">John Doe</td>
                 <td th:text="${order.courier}">UPS</td>
-                <td th:text="${'$' + #numbers.formatDecimal(order.totalPrice,1,2)}">$0.00</td>
+                <td th:text="${order.totalPrice != null ? '$' + #numbers.formatDecimal(order.totalPrice,1,2) : '-'}">$0.00</td>
                 <td>
                   <span class="badge"
                         th:classappend="${order.status == 'P'} ? 'bg-warning text-dark' :
