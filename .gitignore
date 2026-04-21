@@ -40,3 +40,4 @@ build/
 
 ### Sensitive config ###
 /PetStoreClient/src/main/resources/db.properties
+/PetStoreManagerSystem/src/main/resources/application.yml
